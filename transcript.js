@@ -21,7 +21,6 @@ speech_to_text.recognize(params, function(err, transcript) {
   if (err)
     console.log(err);
   else
-    console.log(JSON.stringify(transcript, null, 2));
   	fs.writeFile('transcript.json', JSON.stringify(transcript, null, 2), function(err){
   		if(err) console.log(err);
   		else 
