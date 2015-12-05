@@ -20,8 +20,7 @@ var getTimestamps = function(transcriptPath) {
           word: timestamp[0],
           start: timestamp[1],
           end: timestamp[2],
-          // work around for weird js decimal math
-          duration: ((timestamp[2] * 100 - timestamp[1] * 100) / 100).toFixed(2)
+          duration: timestamp[2] - timestamp[1]
         }
       }));
     });
@@ -36,7 +35,8 @@ var parseAudio = function(transcriptPath, audioPath) {
       	console.log(ts);
         ffmpeg(audioPath)
           .setStartTime(ts.start)
-          .setDuration(ts.duration)
+          // Add a buffer so it doesn't get cut off too early
+          .setDuration(+ts.duration + 0.2)
           .output('./parsed/' + ts.word + '.flac')
 
         .on('end', function(err) {
